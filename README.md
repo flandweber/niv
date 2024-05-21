@@ -546,22 +546,7 @@ override the package `my package-foo` you need to set the environment variable
 
 ### Can I use a git dependency with submodules?
 
-Yes, however you need to follow some steps.
-
-Add your dependency as git dependency to your `sources.json`:
+Yes, add your dependency as git dependency to your `sources.json` with the additional attribute `submodules`:
 ```
-niv add git git@github.com:user/repo -n name
-```
-
-Add `"submodules": true,` to your dependecy in the source.json:
-```
-{
-    "name": {
-        "branch": "main",
-        "repo": "git@github.com:user/repo",
-        "rev": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-        "submodules": true,
-        "type": "git"
-    }
-}
+niv add git git@github.com:user/repo -n name -a submodules=true
 ```
