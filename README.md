@@ -269,6 +269,7 @@ Available options:
 
 Experimental commands:
   git                      Add a git dependency. Experimental.
+  gitverify                Add a git dependency. Experimental.
   github                   Add a GitHub dependency
   local                    Add a local dependency. Experimental.
 ```

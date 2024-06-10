@@ -29,6 +29,7 @@ let
     "^src/Data/Text$"
     "^src/Niv$"
     "^src/Niv/Git$"
+    "^src/Niv/GitVerify$"
     "^src/Niv/GitHub$"
     "^src/Niv/Local$"
     "^src/Niv/Sources$"

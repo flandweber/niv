@@ -27,6 +27,7 @@ import qualified Network.HTTP.Simple as HTTP
 import Niv.Cmd
 import Niv.Git.Cmd
 import Niv.GitHub.Cmd
+import Niv.GitVerify.Cmd
 import Niv.Local.Cmd
 import Niv.Logger
 import Niv.Sources
@@ -292,6 +293,8 @@ parseCmdAdd =
     parseCmd cmd = uncurry (cmdAdd cmd) <$> parseCmdArgs cmd
     parseCmdAddGit =
       Opts.info (parseCmd gitCmd <**> Opts.helper) (description gitCmd)
+    parseCmdAddGitVerify =
+      Opts.info (parseCmd gitVerifyCmd <**> Opts.helper) (description gitVerifyCmd)
     parseCmdAddLocal =
       Opts.info (parseCmd localCmd <**> Opts.helper) (description localCmd)
     parseCmdAddGitHub =
@@ -301,6 +304,7 @@ parseCmdAdd =
         ( Opts.hidden
             <> Opts.commandGroup "Experimental commands:"
             <> Opts.command "git" parseCmdAddGit
+            <> Opts.command "gitverify" parseCmdAddGitVerify
             <> Opts.command "github" parseCmdAddGitHub
             <> Opts.command "local" parseCmdAddLocal
         )
@@ -454,6 +458,7 @@ cmdUpdate = \case
           -- github
           let cmd = case KM.lookup "type" (unPackageSpec defaultSpec) of
                 Just "git" -> gitCmd
+                Just "gitverify" -> gitVerifyCmd
                 Just "local" -> localCmd
                 _ -> githubCmd
               spec = specToLockedAttrs cliSpec <> specToFreeAttrs defaultSpec
@@ -477,6 +482,7 @@ cmdUpdate = \case
         -- github
         let cmd = case KM.lookup "type" (unPackageSpec defaultSpec) of
               Just "git" -> gitCmd
+              Just "gitverify" -> gitVerifyCmd
               Just "local" -> localCmd
               _ -> githubCmd
         fmap attrsToSpec <$> li (doUpdate initialSpec cmd)
