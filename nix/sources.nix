@@ -55,6 +55,17 @@ let
     builtins.fetchGit
       ({ url = spec.repo; inherit (spec) rev; inherit ref; } // submoduleArg);
 
+  fetch_gitverify = pkgs: name: spec:
+    let 
+      git-verify-source = builtins.fetchGit {
+        url = "https://codeberg.org/flandweber/git-verify.git"; 
+        rev = "3d1432359d0d5678ba4f9f68afc85164da51250d";
+      };
+      fetchgitverify = import "${git-verify-source}/fetchgitverify" {inherit pkgs;}; 
+      args = removeAttrs spec ["type" "branch"] // {inherit name;};
+    in 
+      fetchgitverify args;
+
   fetch_local = spec: spec.path;
 
   fetch_builtin-tarball = name: throw
@@ -106,6 +117,7 @@ let
     else if spec.type == "file" then fetch_file pkgs name spec
     else if spec.type == "tarball" then fetch_tarball pkgs name spec
     else if spec.type == "git" then fetch_git name spec
+    else if spec.type == "gitverify" then fetch_gitverify pkgs name spec
     else if spec.type == "local" then fetch_local spec
     else if spec.type == "builtin-tarball" then fetch_builtin-tarball name
     else if spec.type == "builtin-url" then fetch_builtin-url name

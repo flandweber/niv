@@ -161,7 +161,7 @@ nixPrefetchURL unpack turl@(T.unpack -> url) = do
   (exitCode, sout, serr) <- runNixPrefetch
   case (exitCode, lines sout) of
     (ExitSuccess, l : _) -> pure $ T.pack l
-    _ -> abortNixPrefetchExpectedOutput (T.pack <$> args) (T.pack sout) (T.pack serr)
+    _ -> abortNixPrefetchURLExpectedOutput (T.pack <$> args) (T.pack sout) (T.pack serr)
   where
     args = (["--unpack" | unpack]) <> [url, "--name", sanitizeName basename]
     runNixPrefetch = readProcessWithExitCode "nix-prefetch-url" args ""
@@ -173,8 +173,8 @@ nixPrefetchURL unpack turl@(T.unpack -> url) = do
     -- (note: we assume they don't begin with a period)
     isOk c = isAlphaNum c || T.any (c ==) "+-._?="
 
-abortNixPrefetchExpectedOutput :: [T.Text] -> T.Text -> T.Text -> IO a
-abortNixPrefetchExpectedOutput args sout serr =
+abortNixPrefetchURLExpectedOutput :: [T.Text] -> T.Text -> T.Text -> IO a
+abortNixPrefetchURLExpectedOutput args sout serr =
   abort $
     [s|
 Could not read the output of 'nix-prefetch-url'. This is a bug. Please create a
